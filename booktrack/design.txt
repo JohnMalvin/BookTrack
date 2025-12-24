@@ -1,0 +1,21 @@
+ROOM_TYPE = ["suites", "presidential", "regular"]
+ROOM_STATUS = ["booked", "occupied", "vacant"]
+
+
+room = {
+    id: [NUMBER],
+    number: [NUMBER],
+    floor: [NUMBER],
+
+    type: [ROOM_TYPE],
+    status: [ROOM_STATUS],
+    price: [NUMBER],
+
+    numOfBeds: [NUMBER],
+    numOfToilets: [NUMBER],
+    numOfOccupants: [NUMBER],
+
+    checkInDate: [DATE],
+    checkOutDate: [DATE]
+}
+
