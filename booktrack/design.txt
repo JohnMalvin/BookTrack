@@ -1,11 +1,14 @@
 ROOM_TYPE = ["suites", "presidential", "regular"]
 ROOM_STATUS = ["booked", "occupied", "vacant"]
-
+PAYMENT_STATUS = ["unpaid", "paid", "pending"]
+STAY_STATUS = ["reserved", "inhouse", "completed"]
 
 room = {
-    id: [NUMBER],
-    number: [NUMBER],
+    _id: [NUMBER],
     floor: [NUMBER],
+    outlet: [OUTLET_ID],
+    roomNumber: [NUMBER],
+    bookings: [DATE[]],
 
     type: [ROOM_TYPE],
     status: [ROOM_STATUS],
@@ -16,6 +19,62 @@ room = {
     numOfOccupants: [NUMBER],
 
     checkInDate: [DATE],
-    checkOutDate: [DATE]
+    checkOutDate: [DATE],
 }
 
+floor = {
+    _id: [NUMBER],
+    rooms: [ROOM_ID[]],
+    floor_number: [NUMBER],
+}
+
+outlet = {
+    _id: [NUMBER],
+    address: [STRING],
+    availability: [VACANCY]
+
+    rooms: [ROOM_ID[]],
+    floors: [FLOOR_ID[]],
+    numOfRooms: [NUMBER],
+    numOfFloors: [NUMBER],
+}
+
+vacancy = {
+    _id: [NUMBER],
+    vacantSuites: [NUMBER],
+    vacantPresidential: [NUMBER],
+    vacantRegular: [NUMBER],
+
+    suites: [ROOM_ID[]],
+    presidential: [ROOM_ID[]],
+    regular: [ROOM_ID[]],
+}
+
+book = {
+    _id: [NUMBER],
+    booker: [USER_ID],
+    outlet: [OUTLET_ID],
+    floor: [FLOOR_ID],
+    room: [ROOM_ID],
+
+    checkInDate: [DATE],
+    checkOutDate: [DATE],
+    bookingDate: [DATE],
+
+    payment: [PAYMENT_STATUS],
+    status: [STAY_STATUS],
+}
+
+user = {
+    _id: [NUMBER],
+    userID: [NUMBER],
+    sessionID: [NUMBER],
+
+    email: [STRING],
+    phoneNumber: [NUMBER],
+    password: [STRING],
+    
+
+    bookings: [BOOK[]],
+
+}
