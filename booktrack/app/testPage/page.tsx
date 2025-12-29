@@ -19,8 +19,8 @@ export default function TestPage() {
 			},
 			body: JSON.stringify({
 				username: usernameRef.current?.value,
-				email: "emailRef.current?.value",
-				password: "passwordRef.current?.value",
+				email: "example email",
+				password: "example password",
 				nationality: "PH",
 				countryCode: "+63",
 				number: "9123456789",
