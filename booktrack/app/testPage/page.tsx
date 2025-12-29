@@ -1,42 +1,46 @@
-export default async function Home() {
-  const res = await fetch(
-    `${process.env.CLIENT_URL}/api/testAPI`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    } 
-  );
-  if (!res.ok) {
-    const text = await res.text();
-    console.error("POST failed:", text);
-    throw new Error("POST failed");
-  }
-  const data = await res.json();
+"use client";
 
-  const res2 = await fetch(
-    `${process.env.CLIENT_URL}/api/testAPI`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: "Dean"
-      })
-  }
-  );
+import { useRef, useState } from "react";
 
-  if (!res2.ok) {
-    const text = await res2.text();
-    console.error("POST failed:", text);
-    throw new Error("POST failed");
-  }
-  const data2 = await res2.json();
+export default function TestPage() {
+	const usernameRef = useRef<HTMLInputElement | null>(null);
 
-  return (
-    <>
-      <p>{data.message}</p>
-      <p>{data2.message}</p>
-    </>
-  )
+	const [loading, setLoading] = useState(false);
+	const [message, setMessage] = useState("");
+
+	const createUser = async () => {
+		setLoading(true);
+		setMessage("");
+
+		const res = await fetch("/api/user/createUser", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				username: usernameRef.current?.value,
+				email: "emailRef.current?.value",
+				password: "passwordRef.current?.value",
+				nationality: "PH",
+				countryCode: "+63",
+				number: "9123456789",
+			}),
+		});
+
+		const data = await res.json();
+		setMessage(data.message);
+		setLoading(false);
+	};
+
+	return (
+		<>
+			<input ref={usernameRef} placeholder="Username" />
+
+			<button onClick={createUser} disabled={loading}>
+				{loading ? "Creating..." : "CREATE USER"}
+			</button>
+
+			{message && <p>{message}</p>}
+		</>
+	);
 }

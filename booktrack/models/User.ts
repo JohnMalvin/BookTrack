@@ -4,6 +4,7 @@ import mongoose, { Schema, models, Model } from "mongoose";
 interface phoneNumberType {
 	countryCode: number;
 	number: number;
+	verified: boolean;
 }
 
 export interface UserInterface {
@@ -49,6 +50,10 @@ const UserSchema = new Schema<UserInterface>
 					type: Number,
 					required: true,
 				},
+				verified: {
+					type: Boolean,
+					default: false,
+				}
 			},
 
 			nationality: {
