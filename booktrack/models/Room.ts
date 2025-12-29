@@ -5,7 +5,8 @@ export enum RoomTypes {
 	DOUBLE = "DOUBLE",
 	SUITE = "SUITE",
 	FAMILY = "FAMILY",
-	REGULAR = "REGULAR"
+	REGULAR = "REGULAR",
+	UNASSIGNED = "UNASSIGNED"
 }
 
 export enum RoomStatus {

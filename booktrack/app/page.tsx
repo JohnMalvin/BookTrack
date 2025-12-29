@@ -1,4 +1,4 @@
-import { createUser } from "@/lib/dbFunctions";
+import { createUser } from "@/lib/UserFunctions";
 import Image from "next/image";
 
 export default async function Home() {

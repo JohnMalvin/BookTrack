@@ -1,4 +1,4 @@
-import { createUser } from '@/lib/dbFunctions';
+import { createUser } from '@/lib/UserFunctions';
 import { NextResponse } from 'next/server'
 
 export async function GET() {

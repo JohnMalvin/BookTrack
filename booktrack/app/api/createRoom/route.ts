@@ -3,10 +3,6 @@ export const runtime = "nodejs";
 import { createUser } from '@/lib/UserFunctions';
 import { NextResponse } from 'next/server'
 
-export async function GET() {
-  return NextResponse.json({ message: 'Hell worldddd' });
-}
-
 export async function POST(request: Request) {
 	const { name } = await request.json();
 	await createUser();
