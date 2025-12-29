@@ -1,5 +1,7 @@
-// "use client";
-
+"use client";
+export default function SamplePage() {
+	return <div>Hello</div>;
+}
 // export default async function Home() {
 //   const res = await fetch(
 //     `/api/testAPI`, {
