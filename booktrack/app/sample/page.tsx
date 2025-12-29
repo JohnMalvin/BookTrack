@@ -1,6 +1,6 @@
 export default async function Home() {
   const res = await fetch(
-    `${process.env.CLIENT_URL}/api/testAPI`, {
+    `/api/testAPI`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +15,7 @@ export default async function Home() {
   const data = await res.json();
 
   const res2 = await fetch(
-    `${process.env.CLIENT_URL}/api/testAPI`, {
+    `/api/testAPI`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
