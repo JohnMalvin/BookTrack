@@ -1,20 +1,5 @@
 import mongoose, { Schema, models, Model } from "mongoose";
 
-// book = {
-//     _id: [NUMBER],
-//     booker: [USER_ID],
-//     outlet: [OUTLET_ID],
-//     floor: [FLOOR_ID],
-//     room: [ROOM_ID],
-
-//     checkInDate: [DATE],
-//     checkOutDate: [DATE],
-//     bookingDate: [DATE],
-
-//     payment: [PAYMENT_STATUS],
-//     status: [STAY_STATUS],
-// }
-
 export enum PaymentStatus {
 	PAID = "PAID",
 	UNPAID = "UNPAID",
