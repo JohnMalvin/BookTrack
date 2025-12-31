@@ -1,0 +1,3 @@
+400 => bad input
+401 => sessionID not found
+403 => sessionID doesnt match userID

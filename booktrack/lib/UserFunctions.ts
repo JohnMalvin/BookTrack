@@ -136,6 +136,36 @@ export const updateUserDetails = async ({
   	return updatedUser;
 };
 
+type UserDetails = {
+	username: string;
+	email: string;
+	nationality: string;
+	phoneNumber: {
+		countryCode: number;
+		number: number;
+		verified: boolean;
+	};
+};
+
+export const getUserDetails = async (userID: string, sessionID: string): Promise<UserDetails> => {
+	const user = await User.findOne({ userID, sessionID });
+	if (!user) {
+		throw new Error("User not found or session expired");
+	}
+
+	return {
+		username: user.username,
+		email: user.email,
+		nationality: user.nationality,
+		phoneNumber: {
+			countryCode: user.phoneNumber.countryCode,
+			number: user.phoneNumber.number,
+			verified: user.phoneNumber.verified,
+		}
+
+	}
+}
+
 export const addBookingToUser = async (userID: string, bookingID: mongoose.Types.ObjectId) => {
 	const updatedUser = await User.findOneAndUpdate(
 		{ userID },
