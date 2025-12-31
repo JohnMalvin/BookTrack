@@ -37,25 +37,80 @@ export async function createUser(
 	return user._id;
 }
 
-export const checkUserExistByID = async (userID: string): Promise<boolean> => {
-	const exist = await User.findOne({ userID });
-	return (exist !== null);
+type UserDetails = {
+	username: string;
+	email: string;
+	nationality: string;
+	phoneNumber: {
+		countryCode: number;
+		number: number;
+		verified: boolean;
+	};
 }
 
-export const validateUserByUsername = async (username: string, password: string): Promise<string> => {
-	const user = await User.findOne({ username, password });
-	if (user) {
-		return user.userID;
+export const getUserDetails = async (userID: string, sessionID: string): Promise<UserDetails> => {
+	const user = await User.findOne({ userID, sessionID });
+	if (!user) {
+		throw new Error("User not found or session expired");
 	}
-	throw new Error("Either username or password is incorrect");
+
+	return {
+		username: user.username,
+		email: user.email,
+		nationality: user.nationality,
+		phoneNumber: {
+			countryCode: user.phoneNumber.countryCode,
+			number: user.phoneNumber.number,
+			verified: user.phoneNumber.verified,
+		}
+
+	}
 }
 
-export const validateUserByEmail = async (email: string, password: string): Promise<string> => {
-	const user = await User.findOne({ email, password });
-	if (user) {
-		return user.userID;
+type UpdateUserDetailsInput = {
+	username?: string;
+	email?: string;
+	nationality?: string;
+	phoneNumber?: {
+		countryCode?: number;
+		number?: number;
+		verified?: boolean;
+	};
+}
+
+export const updateUserDetails = async (
+	userID: string,
+	details: UpdateUserDetailsInput
+) => {
+	if (!userID) {
+		throw new Error("User Not Found");
+  	}
+
+	if (!details) {
+  		throw new Error("No details provided");
 	}
-	throw new Error("Either username or email is incorrect");
+	const updatedUser = await User.findOneAndUpdate(
+		{ userID },
+		{ $set: details },
+		{
+			new: true,
+			runValidators: true,
+		}
+	);
+
+	if (!updatedUser) {
+		throw new Error("Updated User not found");
+	}
+
+  	return {
+		success: true,
+		user: {
+			username: updatedUser.username,
+			email: updatedUser.email,
+			nationality: updatedUser.nationality,
+			phoneNumber: updatedUser.phoneNumber,
+		},
+	};
 }
 
 export const updateUserPassword = async (
@@ -93,82 +148,6 @@ export const updateUserPassword = async (
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : "Failed to update password";
 		throw new Error(errorMessage);
-	}
-};
-
-type UpdateUserDetailsInput = {
-	username?: string;
-	email?: string;
-	nationality?: string;
-	phoneNumber?: {
-		countryCode?: number;
-		number?: number;
-		verified?: boolean;
-	};
-};
-
-export const updateUserDetails = async (
-	userID: string,
-	details: UpdateUserDetailsInput
-) => {
-	if (!userID) {
-		throw new Error("User Not Found");
-  	}
-
-	if (!details) {
-  		throw new Error("No details provided");
-	}
-	const updatedUser = await User.findOneAndUpdate(
-		{ userID },
-		{ $set: details },
-		{
-			new: true,
-			runValidators: true,
-		}
-	);
-
-	if (!updatedUser) {
-		throw new Error("Updated User not found");
-	}
-
-  	return {
-		success: true,
-		user: {
-			username: updatedUser.username,
-			email: updatedUser.email,
-			nationality: updatedUser.nationality,
-			phoneNumber: updatedUser.phoneNumber,
-		},
-	};
-};
-
-type UserDetails = {
-	username: string;
-	email: string;
-	nationality: string;
-	phoneNumber: {
-		countryCode: number;
-		number: number;
-		verified: boolean;
-	};
-};
-
-export const getUserDetails = async (userID: string, sessionID: string): Promise<UserDetails> => {
-	const user = await User.findOne({ userID, sessionID });
-	if (!user) {
-		throw new Error("User not found or session expired");
-	}
-
-	return {
-		username: user.username,
-		email: user.email,
-		nationality: user.nationality,
-		phoneNumber: {
-			countryCode: user.phoneNumber.countryCode,
-			number: user.phoneNumber.number,
-			verified: user.phoneNumber.verified,
-		}
-
 	}
 }
 

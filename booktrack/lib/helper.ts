@@ -5,20 +5,6 @@ export const createRandomID = (): string => {
 	return randomUUID();
 }
 
-export const apiValidator = async (
-  	sessionID: unknown,
-  	userID: unknown
-) => {
-  	if (typeof sessionID !== "string" || !sessionID) {
-  	  	throw new Error("Session ID missing");
-  	}
-
-	if (typeof userID !== "string" || !userID) {
-		throw new Error("User ID missing");
-	}
-
-  	await validateUserSession(sessionID);
-};
 // ================ USER FUNCTIONS ================
 
 export const createUserID = async (): Promise<string> => {
@@ -51,11 +37,32 @@ export const getUserIDBySession = async (sessionID: string): Promise<string> => 
 
 	return String(user.userID);
 }
+
 export const validateUserSession = async (sessionID: string) => {
 	const user = await User.findOne({ sessionID });
 	if (!user) {
 		throw new Error("Invalid session or user.");
 	}
 	return user;
+}
+export const checkUserExistByID = async (userID: string): Promise<boolean> => {
+	const exist = await User.findOne({ userID });
+	return (exist !== null);
+}
+
+export const validateUserByUsername = async (username: string, password: string): Promise<string> => {
+	const user = await User.findOne({ username, password });
+	if (user) {
+		return user.userID;
+	}
+	throw new Error("Either username or password is incorrect");
+}
+
+export const validateUserByEmail = async (email: string, password: string): Promise<string> => {
+	const user = await User.findOne({ email, password });
+	if (user) {
+		return user.userID;
+	}
+	throw new Error("Either username or email is incorrect");
 }
 // ================ BOOKING FUNCTIONS ================
