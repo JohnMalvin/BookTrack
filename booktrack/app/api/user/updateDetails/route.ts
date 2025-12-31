@@ -1,9 +1,9 @@
 import { validateUserSession } from "@/lib/helper";
-import { updateUserPassword } from "@/lib/UserFunctions";
+import { updateUserDetails } from "@/lib/UserFunctions";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-	const { currentPassword, newPassword } = await request.json();
+	const { details } = await request.json();
 	const sessionID = request.headers.get("sessionID");
 
 	if (!sessionID) {
@@ -15,11 +15,10 @@ export async function POST(request: Request) {
 
 	try {
 		const user = await validateUserSession(sessionID);
-
-		const result = await updateUserPassword(
+		
+		const result = await updateUserDetails(
 			user.userID,
-			currentPassword,
-			newPassword
+			details
 		);
 	
 		return NextResponse.json(result);

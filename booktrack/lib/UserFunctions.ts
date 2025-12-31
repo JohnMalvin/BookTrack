@@ -58,17 +58,6 @@ export const validateUserByEmail = async (email: string, password: string): Prom
 	throw new Error("Either username or email is incorrect");
 }
 
-type UpdateUserDetailsInput = {
-	username?: string;
-	email?: string;
-	nationality?: string;
-	phoneNumber?: {
-		countryCode?: number;
-		number?: number;
-		verified?: boolean;
-	};
-};
-
 export const updateUserPassword = async (
 	userID: string,
 	currentPassword: string,
@@ -107,22 +96,31 @@ export const updateUserPassword = async (
 	}
 };
 
-export const updateUserDetails = async ({
-	userID,
-	sessionID,
-	updates,
-}: {
-	userID: string;
-	sessionID: string;
-	updates: UpdateUserDetailsInput;
-}) => {
-	if (!userID || !sessionID) {
-		throw new Error("Unauthorized");
+type UpdateUserDetailsInput = {
+	username?: string;
+	email?: string;
+	nationality?: string;
+	phoneNumber?: {
+		countryCode?: number;
+		number?: number;
+		verified?: boolean;
+	};
+};
+
+export const updateUserDetails = async (
+	userID: string,
+	details: UpdateUserDetailsInput
+) => {
+	if (!userID) {
+		throw new Error("User Not Found");
   	}
 
+	if (!details) {
+  		throw new Error("No details provided");
+	}
 	const updatedUser = await User.findOneAndUpdate(
-		{ userID, sessionID },
-		{ $set: updates },
+		{ userID },
+		{ $set: details },
 		{
 			new: true,
 			runValidators: true,
@@ -130,10 +128,18 @@ export const updateUserDetails = async ({
 	);
 
 	if (!updatedUser) {
-		throw new Error("User not found or session expired");
+		throw new Error("Updated User not found");
 	}
 
-  	return updatedUser;
+  	return {
+		success: true,
+		user: {
+			username: updatedUser.username,
+			email: updatedUser.email,
+			nationality: updatedUser.nationality,
+			phoneNumber: updatedUser.phoneNumber,
+		},
+	};
 };
 
 type UserDetails = {

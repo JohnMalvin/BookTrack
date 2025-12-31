@@ -43,6 +43,14 @@ export const createSessionID = async (): Promise<string> => {
 	return String(sessionID);
 }
 
+export const getUserIDBySession = async (sessionID: string): Promise<string> => {
+	const user = await User.findOne({ sessionID });
+	if (!user) {
+		throw new Error("User Not Found");
+	}
+
+	return String(user.userID);
+}
 export const validateUserSession = async (sessionID: string) => {
 	const user = await User.findOne({ sessionID });
 	if (!user) {
